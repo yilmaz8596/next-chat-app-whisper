@@ -3,7 +3,7 @@ import { httpAction } from "./_generated/server";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { Webhook } from "svix";
 import { internal } from "./_generated/api";
-
+import { Id } from "./_generated/dataModel";
 const http = httpRouter();
 
 const validatePayload = async (
@@ -60,6 +60,25 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
       break;
     case "user.deleted":
       console.log(`Deleting user with clerkId ${event.data.id}`);
+
+      // Ensure `event.data.id` is defined
+      if (!event.data.id) {
+        console.error("Error: Clerk user ID is undefined in the event data");
+        return new Response("Invalid user ID", { status: 400 });
+      }
+
+      const user = await ctx.runQuery(internal.user.get, {
+        clerkId: event.data.id, // Safely use `event.data.id` here
+      });
+
+      if (user) {
+        await ctx.runMutation(internal.user.del, {
+          id: user._id, // Use the Convex ID for deletion
+        });
+        console.log(`User with ID ${user._id} deleted`);
+      } else {
+        console.error(`User with clerkId ${event.data.id} not found in Convex`);
+      }
       break;
     default:
       console.log(`Unhandled webhook event type: ${event.type}`);

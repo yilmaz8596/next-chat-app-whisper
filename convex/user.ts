@@ -1,5 +1,6 @@
 import { internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
+import { Id } from "./_generated/dataModel";
 export const create = internalMutation({
   args: {
     username: v.string(),
@@ -21,5 +22,14 @@ export const get = internalQuery({
       .query("users")
       .withIndex("by_clerkId", (q) => q.eq("clerkId", args.clerkId))
       .unique();
+  },
+});
+
+export const del = internalMutation({
+  args: {
+    id: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id);
   },
 });
