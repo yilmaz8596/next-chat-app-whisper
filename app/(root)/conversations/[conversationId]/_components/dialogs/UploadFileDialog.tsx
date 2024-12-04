@@ -1,5 +1,7 @@
 "use client";
 
+import useMutationState from "@/hooks/useMutationState";
+import useConversation from "@/hooks/useConversation";
 import Uploader from "@/components/shared/uploader";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +11,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -19,11 +20,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { api } from "@/convex/_generated/api";
-import { useConversation } from "@/hooks/useConversation";
-import { useMutationState } from "@/hooks/useMutationState";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ConvexError } from "convex/values";
-import { File, Image } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -50,12 +48,11 @@ const UploadFileDialog = ({ open, toggle, type }: Props) => {
   });
 
   const { conversationId } = useConversation();
-
   const files = form.watch("files");
 
-  const { mutate: createMessage, pending } = useMutationState(
-    api.message.create
-  );
+  const { mutate: createMessage, pending } = useMutationState({
+    mutationToRun: api.message.create,
+  });
 
   const handleSubmit = async (values: z.infer<typeof uploadFileSchema>) => {
     createMessage({
@@ -77,12 +74,7 @@ const UploadFileDialog = ({ open, toggle, type }: Props) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(open) => toggle(open)}>
-      <DialogTrigger asChild>
-        <Button size="icon" variant="outline">
-          {type === "image" ? <Image /> : <File />}
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={toggle}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Upload files</DialogTitle>

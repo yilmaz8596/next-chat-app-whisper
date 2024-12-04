@@ -1,7 +1,11 @@
+"use client";
+
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Id } from "@/convex/_generated/dataModel";
 import { User } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -23,8 +27,12 @@ const DMConversationItem = ({
   lastMessageContent,
   unseenCount,
 }: Props) => {
+  const conversation = useQuery(api.conversation.getConversation, {
+    conversationId: id,
+  });
+
   return (
-    <Link href={`/conversations/${id}`} className="w-full">
+    <Link href={`/conversations/${conversation?._id}`} className="w-full">
       <Card className="p-2 flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-4 truncate">
           <Avatar>
@@ -34,13 +42,8 @@ const DMConversationItem = ({
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col truncate">
-            <h4 className="truncate">{username}</h4>
             {lastMessageSender && lastMessageContent ? (
               <span className="text-sm text-muted-foreground flex truncate overflow-ellipsis">
-                <p className="font-semibold">
-                  {lastMessageSender}
-                  {":"}&nbsp;
-                </p>
                 <p className="truncate overflow-ellipsis">
                   {lastMessageContent}
                 </p>
