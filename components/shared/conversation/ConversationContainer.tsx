@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 
 type Props = React.PropsWithChildren<{
-  title: string;
+  title?: string;
   action?: React.ReactNode;
 }>;
 
