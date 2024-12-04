@@ -1,5 +1,7 @@
+import SidebarWrapper from "@/components/shared/sidebar/SidebarWrapper";
+
 export default function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return <div>{children}</div>;
+  return <SidebarWrapper>{children}</SidebarWrapper>;
 }
