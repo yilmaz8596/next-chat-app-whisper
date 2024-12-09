@@ -36,7 +36,6 @@ export default function ConversationsLayout({
                 <DMConversationItem
                   key={conversation.conversation._id}
                   id={conversation.conversation._id}
-                  username={conversation.otherMember?.username || ""}
                   imageUrl={conversation.otherMember?.imageUrl || ""}
                   lastMessageSender={conversation.lastMessage?.sender}
                   lastMessageContent={conversation.lastMessage?.content}
