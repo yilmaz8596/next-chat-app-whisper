@@ -13,7 +13,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import useConversation from "@/hooks/useConversation";
-import { CallRoom } from "./CallRoom";
 
 type Props = {
   members: {
