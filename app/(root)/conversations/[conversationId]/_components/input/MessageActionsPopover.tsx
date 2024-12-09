@@ -23,11 +23,9 @@ const MessageActionsPopover = ({ setEmojiPickerOpen }: Props) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div>
-          <Button size="icon" variant="secondary">
-            <PlusCircle className="h-4 w-4" />
-          </Button>
-        </div>
+        <Button size="icon" variant="secondary">
+          <PlusCircle className="h-4 w-4" />
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-fit p-2" align="start">
         <div className="flex flex-col gap-2">

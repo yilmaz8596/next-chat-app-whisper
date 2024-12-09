@@ -53,7 +53,7 @@ const Header = ({ imageUrl, name, options, setCallType }: Props) => {
         </Button>
         {options ? (
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
               <Button size="icon" variant="secondary">
                 <Settings />
               </Button>

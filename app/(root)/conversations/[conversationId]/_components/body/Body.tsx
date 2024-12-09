@@ -60,7 +60,7 @@ const Body = ({ members, callType, setCallType }: Props) => {
         return (
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <p className="text-muted-foreground text-sm text-right">{`Seen by ${
                   names[0]
                 }, ${names[1]}, and ${names.length - 2} more`}</p>

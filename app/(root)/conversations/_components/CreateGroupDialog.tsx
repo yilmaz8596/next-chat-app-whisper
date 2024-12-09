@@ -1,9 +1,6 @@
 "use client";
 
-import useMutationState from "@/hooks/useMutationState";
-import { useQuery } from "convex/react";
-import { useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -37,10 +34,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { api } from "@/convex/_generated/api";
+import useMutationState from "@/hooks/useMutationState";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "convex/react";
 import { ConvexError } from "convex/values";
 import { CirclePlus, X } from "lucide-react";
-
+import { useMemo } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -53,6 +53,7 @@ const createGroupFormSchema = z.object({
 });
 
 const CreateGroupDialog = () => {
+  const [open, setOpen] = useState(false);
   const friends = useQuery(api.friends.get);
 
   const { mutate: createGroup, pending } = useMutationState({
@@ -93,10 +94,17 @@ const CreateGroupDialog = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <Button size="icon" variant="outline">
+        <TooltipTrigger>
+          <Button
+            size="icon"
+            variant="outline"
+            onClick={() => {
+              console.log("Button clicked"); // Add this debug log
+              setOpen(true);
+            }}
+          >
             <DialogTrigger asChild>
               <CirclePlus />
             </DialogTrigger>
@@ -144,7 +152,7 @@ const CreateGroupDialog = () => {
                         asChild
                         disabled={unselectedFriends.length === 0}
                       >
-                        <Button className="w-full" variant="outline">
+                        <Button className="w-full" variant="outline" asChild>
                           Select
                         </Button>
                       </DropdownMenuTrigger>
@@ -169,7 +177,11 @@ const CreateGroupDialog = () => {
                                   {friend.username.substring(0, 1)}
                                 </AvatarFallback>
                               </Avatar>
-                              <h4 className="truncate">{friend.username}</h4>
+                              <h4 className="truncate">
+                                {friend.username.includes("null null")
+                                  ? "Anonymous"
+                                  : friend.username}
+                              </h4>
                             </DropdownMenuCheckboxItem>
                           );
                         })}
@@ -208,7 +220,9 @@ const CreateGroupDialog = () => {
                           />
                         </div>
                         <p className="truncate text-sm">
-                          {friend?.username?.split(" ")[0]}
+                          {friend?.username?.includes("null null")
+                            ? "Anonymous"
+                            : friend?.username?.split(" ")[0]}
                         </p>
                       </div>
                     );
@@ -216,7 +230,7 @@ const CreateGroupDialog = () => {
               </Card>
             ) : null}
             <DialogFooter>
-              <Button disabled={pending} type="submit">
+              <Button disabled={pending} type="submit" asChild>
                 Create
               </Button>
             </DialogFooter>
