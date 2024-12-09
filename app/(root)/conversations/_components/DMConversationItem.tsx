@@ -13,7 +13,6 @@ import React from "react";
 type Props = {
   id: Id<"conversations">;
   imageUrl: string;
-  username: string;
   lastMessageSender?: string;
   lastMessageContent?: string;
   unseenCount: number;
@@ -22,7 +21,6 @@ type Props = {
 const DMConversationItem = ({
   id,
   imageUrl,
-  username,
   lastMessageSender,
   lastMessageContent,
   unseenCount,

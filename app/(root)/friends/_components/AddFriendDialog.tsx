@@ -39,8 +39,6 @@ const addFriendFormSchema = z.object({
     .email("Invalid email"),
 });
 
-type FormData = z.infer<typeof addFriendFormSchema>;
-
 export default function AddFriendDialog() {
   const { mutate: createRequest, pending } = useMutationState({
     mutationToRun: api.request.create,

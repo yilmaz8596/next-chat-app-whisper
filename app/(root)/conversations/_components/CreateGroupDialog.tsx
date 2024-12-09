@@ -74,7 +74,7 @@ const CreateGroupDialog = () => {
     return friends
       ? friends.filter((friend) => !members.includes(friend._id))
       : [];
-  }, [members.length, friends?.length]);
+  }, [members.length, friends?.length, friends, members]);
 
   const handleSubmit = async (
     values: z.infer<typeof createGroupFormSchema>
