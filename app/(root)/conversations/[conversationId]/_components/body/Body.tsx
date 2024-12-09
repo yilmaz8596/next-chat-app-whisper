@@ -117,11 +117,9 @@ const Body = ({ members, callType, setCallType }: Props) => {
           }
         )
       ) : (
-        <CallRoom
-          audio={callType === "audio" || callType === "video"}
-          video={callType === "video"}
-          handleDisconnect={() => setCallType(null)}
-        />
+        <div className="flex items-center justify-center h-full w-full">
+          <p className="text-muted-foreground">You are in a call</p>
+        </div>
       )}
     </div>
   );
