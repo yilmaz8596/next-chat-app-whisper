@@ -24,9 +24,9 @@ type Props = {
 };
 
 const LeaveGroupDialog = ({ conversationId, open, setOpen }: Props) => {
-  const { mutate: leaveGroup, pending } = useMutationState(
-    api.conversation.leaveGroup
-  );
+  const { mutate: leaveGroup, pending } = useMutationState({
+    mutationToRun: api.conversation.leaveGroup,
+  });
 
   const handleLeaveGroup = async () => {
     leaveGroup({ conversationId })
