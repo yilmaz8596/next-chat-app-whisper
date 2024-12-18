@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import '@uploadthing/react/styles.css';
 import ConvexClientProvider from "@/providers/ConvexClientProvider";
 import { ThemeProvider } from "@/components/ui/theme/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";

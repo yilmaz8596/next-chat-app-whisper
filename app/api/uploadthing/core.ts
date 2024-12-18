@@ -1,30 +1,34 @@
-import { useAuth } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 const f = createUploadthing();
 
-const useHandleAuth = () => {
-  const { userId } = useAuth();
+const handleAuth = async () => {
+  const user = await currentUser();
 
-  if (!userId) throw new Error("Unauthorized");
-
-  return { userId };
+  if (!user) throw new Error("Unauthorized");
+  return { userId: user.id };
 };
 
-// FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
-  image: f({ image: { maxFileCount: 6 }, video: { maxFileCount: 3 } })
-    .middleware(() => {
-      const auth = useHandleAuth(); // Now, React hooks' rules are followed
-      return auth;
+  image: f({ 
+    image: { maxFileCount: 6 }, 
+    video: { maxFileCount: 3 } 
+  })
+    .middleware(async () => {
+      return await handleAuth();
     })
-    .onUploadComplete(() => {}),
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete", metadata, file);
+    }),
+
   file: f(["image", "video", "audio", "pdf"])
-    .middleware(() => {
-      const auth = useHandleAuth(); // Same adjustment for this route
-      return auth;
+    .middleware(async () => {
+      return await handleAuth();
     })
-    .onUploadComplete(() => {}),
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete", metadata, file);
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

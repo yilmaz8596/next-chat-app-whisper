@@ -12,7 +12,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import useConversation from "@/hooks/useConversation";
+import useConversation  from "@/hooks/useConversation";
+import { CallRoom } from "./CallRoom";
 
 type Props = {
   members: {
@@ -32,9 +33,7 @@ const Body = ({ members, callType, setCallType }: Props) => {
     id: conversationId as Id<"conversations">,
   });
 
-  const { mutate: markRead } = useMutationState({
-    mutationToRun: api.conversation.markRead,
-  });
+  const { mutate: markRead } = useMutationState({ mutationToRun: api.conversation.markRead });
 
   useEffect(() => {
     if (messages && messages.length > 0) {
@@ -59,7 +58,7 @@ const Body = ({ members, callType, setCallType }: Props) => {
         return (
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger>
                 <p className="text-muted-foreground text-sm text-right">{`Seen by ${
                   names[0]
                 }, ${names[1]}, and ${names.length - 2} more`}</p>
@@ -117,9 +116,11 @@ const Body = ({ members, callType, setCallType }: Props) => {
           }
         )
       ) : (
-        <div className="flex items-center justify-center h-full w-full">
-          <p className="text-muted-foreground">You are in a call</p>
-        </div>
+        <CallRoom
+          audio={callType === "audio" || callType === "video"}
+          video={callType === "video"}
+          handleDisconnect={() => setCallType(null)}
+        />
       )}
     </div>
   );
